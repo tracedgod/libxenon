@@ -14,7 +14,7 @@ COPY toolchain ./toolchain
 
 WORKDIR /root
 RUN echo "[+] Installing toolchain"
-RUN (cd /build/toolchain && chmod +x build-xenon-toolchain && ./build-xenon-toolchain toolchain && cd / && rm -rf /build) || (cat build.log; exit 1)
+RUN (cd /build/toolchain && ./build-xenon-toolchain toolchain && cd / && rm -rf /build) || (cat build.log; exit 1)
 
 RUN echo "[+] Setting environment variables"
 RUN echo 'export DEVKITXENON="/usr/local/xenon"' >> /etc/profile.d/99-devkitxenon.sh
