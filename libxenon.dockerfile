@@ -20,7 +20,7 @@ RUN echo "[+] Setting environment variables"
 RUN echo 'export DEVKITXENON="/usr/local/xenon"' >> /etc/profile.d/99-devkitxenon.sh
 RUN echo 'export PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"' >> /etc/profile.d/99-devkitxenon.sh
 
-FROM toolchain-build as libxenon-build
+FROM toolchain-build AS libxenon-build
 
 RUN apt update && apt install nano && \
   apt -y clean autoclean autoremove && \
