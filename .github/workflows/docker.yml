@@ -45,6 +45,7 @@ jobs:
           tags: free60/toolchain:latest
           cache-from: type=local,src=/tmp/.buildx-cache-toolchain
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-toolchain-new
+          load: true
 
       - name: Build and push LibXenon
         id: docker_build_libxenon
@@ -60,6 +61,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache-libxenon
                       type=local,mode=max,dest=/tmp/.buildx-cache-toolchain-new
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-libxenon-new
+          load: true
 
       - name: Image digest
         run: |
