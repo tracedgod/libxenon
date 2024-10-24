@@ -55,6 +55,8 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: free60/libxenon:latest
+          build-args: |
+              PULL=0
           cache-from: type=local,src=/tmp/.buildx-cache-libxenon
                       type=local,mode=max,dest=/tmp/.buildx-cache-toolchain-new
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-libxenon-new
