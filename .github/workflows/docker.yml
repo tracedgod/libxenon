@@ -28,26 +28,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            /tmp/.buildx-cache-toolchain
             /tmp/.buildx-cache-libxenon
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
-      - name: Build and push Toolchain
-        id: docker_build_toolchain
-        uses: docker/build-push-action@v6
-        with:
-          context: ./
-          file: ./toolchain.dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: free60/toolchain:latest
-          build-args: |
-              BUILDKIT_INLINE_CACHE=1
-          cache-from: type=local,src=/tmp/.buildx-cache-toolchain
-          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-toolchain-new
-          load: true
 
       - name: Build and push LibXenon
         id: docker_build_libxenon
@@ -58,16 +42,11 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: free60/libxenon:latest
-          build-args: |
-              BUILDKIT_INLINE_CACHE=1
           cache-from: type=local,src=/tmp/.buildx-cache-libxenon
-                      type=local,mode=max,dest=/tmp/.buildx-cache-toolchain-new
           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-libxenon-new
-          load: true
 
       - name: Image digest
         run: |
-          echo toolchain image ${{ steps.docker_build_toolchain.outputs.digest }}
           echo libxenon image ${{ steps.docker_build_libxenon.outputs.digest }}
 
         # Temp fix
@@ -75,7 +54,5 @@ jobs:
         # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache-toolchain
           rm -rf /tmp/.buildx-cache-libxenon
-          mv /tmp/.buildx-cache-toolchain-new /tmp/.buildx-cache-toolchain
           mv /tmp/.buildx-cache-libxenon-new /tmp/.buildx-cache-libxenon
