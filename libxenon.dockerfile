@@ -16,6 +16,10 @@ WORKDIR /root
 RUN echo "[+] Installing toolchain"
 RUN (cd /build/toolchain && ./build-xenon-toolchain toolchain && cd / && rm -rf /build) || (cat build.log; exit 1)
 
+RUN echo "[+] Setting environment variables"
+RUN echo 'export DEVKITXENON="/usr/local/xenon"' >> /etc/profile.d/99-devkitxenon.sh
+RUN echo 'export PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"' >> /etc/profile.d/99-devkitxenon.sh
+
 FROM toolchain-build as libxenon-build
 
 RUN apt update && apt install nano && \
@@ -31,9 +35,5 @@ RUN ./build-xenon-toolchain libxenon || (cat build.log; exit 1)
 
 RUN echo "[+] Installing dependencies"
 RUN ./build-xenon-toolchain libs || (cat build.log; exit 1)
-
-RUN echo "[+] Setting environment variables"
-RUN echo 'export DEVKITXENON="/usr/local/xenon"' >> /etc/profile.d/99-devkitxenon.sh
-RUN echo 'export PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"' >> /etc/profile.d/99-devkitxenon.sh
 
 CMD ["/bin/bash", "-l"]
