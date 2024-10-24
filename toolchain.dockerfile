@@ -1,4 +1,4 @@
-FROM ubuntu:21.04
+FROM ubuntu:22.04
 
 ENV TZ=Europe/Berlin
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -6,8 +6,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt update && apt install -y \
     flex bison gcc-multilib libgmp3-dev libmpfr-dev libmpc-dev \
     texinfo git-core build-essential wget file && \
-  apt -y clean autoclean autoremove && \
-  rm -rf /var/lib/{apt,dpkg,cache,log}/
+    apt -y clean autoclean autoremove && \
+    rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 WORKDIR /build
 COPY toolchain ./toolchain
